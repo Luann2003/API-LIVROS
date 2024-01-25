@@ -30,17 +30,24 @@ public class Book {
 	@JoinColumn(name = "author_id")
 	private Author author;
 	
+	@ManyToOne
+	@JoinColumn(name = "rent_id")
+	private Rent rent;
+	
 	public Book() {
 	}
 
-	public Book(Long id, String title, Long isbn, Long yearPublication, Publisher publisher, Author author) {
+	public Book(Long id, String title, Long isbn, Long yearPublication, Publisher publisher, Author author, Rent rent) {
 		this.id = id;
 		this.title = title;
 		this.isbn = isbn;
 		this.yearPublication = yearPublication;
 		this.publisher = publisher;
 		this.author = author;
+		this.rent = rent;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -88,6 +95,14 @@ public class Book {
 
 	public void setAuthor(Author author) {
 		this.author = author;
+	}
+	
+	public Rent getRent() {
+		return rent;
+	}
+
+	public void setRent(Rent rent) {
+		this.rent = rent;
 	}
 
 	@Override

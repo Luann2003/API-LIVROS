@@ -33,11 +33,20 @@ INSERT INTO tb_publisher(name) VALUES ('');
 INSERT INTO tb_publisher(name) VALUES ('');
 INSERT INTO tb_publisher(name) VALUES ('');
 
+INSERT INTO tb_rent (price, init_date, devolution_date, user_id) VALUES (20.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 1);
+INSERT INTO tb_rent (price, init_date, devolution_date, user_id) VALUES (40.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 2);
+INSERT INTO tb_rent (price, init_date, devolution_date, user_id) VALUES (35.20, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 3);
 
-INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id) VALUES ('Ensaio sobre a Cegueira', 9783127323207, 1995, 1, 1);
-
-
-
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent_id) VALUES ('Ensaio sobre a Cegueira', 9783127323207, 1995, 1, 1, 1);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent_id) VALUES ('A Hora da Estrela', 9783127323207, 1977, 2, 2, 3);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent_id) VALUES ('The Raven" (O Corvo)', 9783127323207, 1845, 3, 3, 2);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id) VALUES ('Crime e Castigo', 9783127323207, 1866, 4, 4);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id) VALUES ('Romeu e Julieta', 9783127323207, 1597, 5, 5);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id) VALUES ('Em Busca do Tempo Perdido', 9783127323207, 1913, 6, 6);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id) VALUES ('Dom Quixote', 9783127323207, 1605, 7, 7);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id) VALUES ('Cem Anos de Solidão', 9783127323207, 1967, 8, 8);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id) VALUES ('A Metamorfose', 9783127323207, 1915, 9, 9);
+INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id) VALUES ('Ficções', 9783127323207, 1944, 10, 10);
 
 
 
