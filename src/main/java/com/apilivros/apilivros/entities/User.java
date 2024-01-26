@@ -38,12 +38,18 @@ public class User {
 	public User() {
 	}
 
-	public User(Long id, String email, String name, String password) {
+	
+
+	public User(Long id, String email, String name, String password, Rent rent) {
+		super();
 		this.id = id;
 		this.email = email;
 		this.name = name;
 		this.password = password;
+		this.rent = rent;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -75,6 +81,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public Rent getRent() {
+		return rent;
+	}
+
+	public void setRent(Rent rent) {
+		this.rent = rent;
 	}
 
 	public Set<Role> getRoles() {

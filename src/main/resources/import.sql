@@ -33,9 +33,10 @@ INSERT INTO tb_publisher(name) VALUES ('');
 INSERT INTO tb_publisher(name) VALUES ('');
 INSERT INTO tb_publisher(name) VALUES ('');
 
-INSERT INTO tb_rent (price, init_date, devolution_date, user_id) VALUES (20.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 1);
-INSERT INTO tb_rent (price, init_date, devolution_date, user_id) VALUES (40.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 2);
-INSERT INTO tb_rent (price, init_date, devolution_date, user_id) VALUES (35.20, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 3);
+INSERT INTO tb_rent (price, init_date, devolution_date, devolution, user_id) VALUES (20.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 1 ,1);
+INSERT INTO tb_rent (price, init_date, devolution_date, devolution, user_id) VALUES (40.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 1 ,2);
+INSERT INTO tb_rent (price, init_date, devolution_date, devolution, user_id) VALUES (35.20, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 1 ,3);
+
 
 INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent_id) VALUES ('Ensaio sobre a Cegueira', 9783127323207, 1995, 1, 1, 1);
 INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent_id) VALUES ('A Hora da Estrela', 9783127323207, 1977, 2, 2, 3);

@@ -29,6 +29,8 @@ public class Rent {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant devolutionDate;
 	
+	private boolean devolution;
+	
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -39,18 +41,14 @@ public class Rent {
 	public Rent() {
 	}
 
-	
-
-	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, User user) {
-		super();
+	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, boolean devolution, User user) {
 		this.id = id;
 		this.price = price;
 		this.initDate = initDate;
 		this.devolutionDate = devolutionDate;
+		this.devolution = devolution;
 		this.user = user;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -91,6 +89,14 @@ public class Rent {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	public boolean isDevolution() {
+		return devolution;
+	}
+
+	public void setDevolution(boolean devolution) {
+		this.devolution = devolution;
+	}
 
 	public List<Book> getBooks() {
 		return books;
@@ -112,4 +118,6 @@ public class Rent {
 		Rent other = (Rent) obj;
 		return Objects.equals(id, other.id);
 	}
+	
+
 }
