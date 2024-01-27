@@ -52,10 +52,6 @@ public class Author {
 		return books;
 	}
 
-	public void setBooks(List<Book> books) {
-		this.books = books;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

@@ -13,31 +13,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.apilivros.apilivros.dto.BookDTO;
-import com.apilivros.apilivros.services.BookService;
+import com.apilivros.apilivros.dto.AuthorDTO;
+import com.apilivros.apilivros.services.AuthorService;
 
 @RestController
-@RequestMapping(value = "/books")
-public class BookController {
+@RequestMapping(value = "/author")
+public class AuthorController {
 	
 	@Autowired
-	private BookService service;
+	private AuthorService service;
 	
 	@GetMapping
-	public ResponseEntity<List<BookDTO>> findAll(){
-		List<BookDTO> result = service.findAll();
+	public ResponseEntity<List<AuthorDTO>> findAll(){
+		List<AuthorDTO> result = service.findAll();
 		return ResponseEntity.ok().body(result);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<BookDTO> findById (@PathVariable Long id){
-		BookDTO bookDTO = service.findById(id);
+	public ResponseEntity<AuthorDTO> findById (@PathVariable Long id){
+		AuthorDTO bookDTO = service.findById(id);
 		return ResponseEntity.ok(bookDTO);
 		
 	}
 	
 	@PostMapping
-	public ResponseEntity<BookDTO> insert (@RequestBody BookDTO dto){
+	public ResponseEntity<AuthorDTO> insert (@RequestBody AuthorDTO dto){
 		dto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();

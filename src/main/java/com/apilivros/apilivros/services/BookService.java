@@ -15,7 +15,7 @@ import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 public class BookService {
 	
 	@Autowired
-	private BookRepository repository;
+	private BookRepository repository;	
 	
 	@Transactional(readOnly = true)
 	public List<BookDTO> findAll () {
@@ -31,15 +31,21 @@ public class BookService {
 	}
 	
 	@Transactional
-	private BookDTO insert() {
+	public BookDTO insert(BookDTO dto) {
+		Book entity = new Book();
+
+		copyDtoToEntity(dto, entity);
 		
+		entity = repository.save(entity); 
+		
+		return new BookDTO(entity);
 	}
 	
 	private void copyDtoToEntity(BookDTO dto, Book entity) {
 		entity.setIsbn(dto.getIsbn());
 		entity.setTitle(dto.getTitle());
 		entity.setYearPublication(dto.getYearPublication());
-		entity.setAuthor(dto.getAuthorDTO());
+			
 	}
 
 }
