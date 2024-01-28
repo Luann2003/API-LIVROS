@@ -44,12 +44,14 @@ public class BookService {
 	public BookDTO insert(BookDTO dto) {
 		Book entity = new Book();
 		
+		copyDtoToEntity(dto, entity);
+		
 		Author author = authorRepository.getReferenceById(dto.getAuthorId());
 		author.setId(dto.getAuthorId());
 		Publisher publisher = publisherRepository.getReferenceById(dto.getPublisherId());
-		publisher.setId(dto.getId());
+		publisher.setId(dto.getPublisherId());
 		
-		copyDtoToEntity(dto, entity);
+		
 		entity.setAuthor(author);
 		entity.setPublisher(publisher);
 		entity = repository.save(entity); 

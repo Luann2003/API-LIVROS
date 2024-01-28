@@ -10,7 +10,7 @@ public class BookDTO {
 	private Long yearPublication;
 	
 	private Long authorId;
-	private Long PublisherId;
+	private Long publisherId;
 	
 	
 	public BookDTO() {
@@ -30,7 +30,7 @@ public class BookDTO {
 		isbn = entity.getIsbn();
 		yearPublication = entity.getYearPublication();
 		authorId = entity.getAuthor().getId();
-		PublisherId = entity.getPublisher().getId();
+		publisherId = entity.getPublisher().getId();
 	}
 
 	public Long getId() {
@@ -54,7 +54,7 @@ public class BookDTO {
 	}
 
 	public Long getPublisherId() {
-		return PublisherId;
+		return publisherId;
 	}
 	
 	
