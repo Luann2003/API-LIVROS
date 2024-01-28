@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.apilivros.apilivros.dto.BookAuthorDTO;
 import com.apilivros.apilivros.dto.BookDTO;
 import com.apilivros.apilivros.services.BookService;
 
@@ -37,7 +38,7 @@ public class BookController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<BookDTO> insert (@RequestBody BookDTO dto){
+	public ResponseEntity<BookAuthorDTO> insert (@RequestBody BookAuthorDTO dto){
 		dto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();

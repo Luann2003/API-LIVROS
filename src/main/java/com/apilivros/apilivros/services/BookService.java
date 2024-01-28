@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.apilivros.apilivros.dto.BookAuthorDTO;
 import com.apilivros.apilivros.dto.BookDTO;
 import com.apilivros.apilivros.entities.Author;
 import com.apilivros.apilivros.entities.Book;
@@ -41,25 +42,29 @@ public class BookService {
 	}
 	
 	@Transactional
-	public BookDTO insert(BookDTO dto) {
+	public BookAuthorDTO insert(BookAuthorDTO dto) {
 		Book entity = new Book();
 		
 		copyDtoToEntity(dto, entity);
 		
-		Author author = authorRepository.getReferenceById(dto.getAuthorId());
-		author.setId(dto.getAuthorId());
-		Publisher publisher = publisherRepository.getReferenceById(dto.getPublisherId());
-		publisher.setId(dto.getPublisherId());
+		Author author = new Author();
+		author.setId(dto.getAuthor().getId());
+		author.setName(dto.getAuthor().getName());
+		author = authorRepository.save(author);
+		Publisher publisher = new Publisher();
+		publisher.setName(dto.getPublisher().getName());
+		publisher.setName(dto.getPublisher().getName());
+		publisher = publisherRepository.save(publisher);
 		
 		
 		entity.setAuthor(author);
 		entity.setPublisher(publisher);
 		entity = repository.save(entity); 
 		
-		return new BookDTO(entity);
+		return new BookAuthorDTO(entity);
 	}
 	
-	private void copyDtoToEntity(BookDTO dto, Book entity) {
+	private void copyDtoToEntity(BookAuthorDTO dto, Book entity) {
 		entity.setIsbn(dto.getIsbn());
 		entity.setTitle(dto.getTitle());
 		entity.setYearPublication(dto.getYearPublication());
