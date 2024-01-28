@@ -13,7 +13,7 @@ public class AuthorDTO {
 	
 	private Long bookId;
 	
-	private List<Book> books = new ArrayList<>();
+	private List<BookDTO> books = new ArrayList<>();
 	
 	public AuthorDTO() {
 	}
@@ -26,6 +26,12 @@ public class AuthorDTO {
 	public AuthorDTO(Author entity) {
 		id = entity.getId();
 		name = entity.getName();
+		
+		
+		for(Book book: entity.getBooks()) {
+			books.add(new BookDTO(book));
+			bookId = book.getId();
+		}
 	}
 
 	public Long getId() {
@@ -44,7 +50,7 @@ public class AuthorDTO {
 		this.name = name;
 	}
 
-	public List<Book> getBooks() {
+	public List<BookDTO> getBooks() {
 		return books;
 	}
 

@@ -41,10 +41,13 @@ public class AuthorService {
 		
 		Book book = bookRepository.getReferenceById(dto.getBookId());
 		book.setId(dto.getBookId());
-
+		
+		
 		copyDtoToEntity(dto, entity);
 		
-		entity = repository.save(entity); 
+		entity.getBooks().add(book);
+		repository.save(entity); 
+		bookRepository.saveAll(entity.getBooks());
 		
 		return new AuthorDTO(entity);
 	}

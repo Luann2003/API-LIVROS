@@ -7,8 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apilivros.apilivros.dto.BookDTO;
+import com.apilivros.apilivros.entities.Author;
 import com.apilivros.apilivros.entities.Book;
+import com.apilivros.apilivros.entities.Publisher;
+import com.apilivros.apilivros.repositories.AuthorRepository;
 import com.apilivros.apilivros.repositories.BookRepository;
+import com.apilivros.apilivros.repositories.PublisherRepository;
 import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -16,6 +20,12 @@ public class BookService {
 	
 	@Autowired
 	private BookRepository repository;	
+	
+	@Autowired
+	private AuthorRepository authorRepository;
+	
+	@Autowired
+	private PublisherRepository publisherRepository;
 	
 	@Transactional(readOnly = true)
 	public List<BookDTO> findAll () {
@@ -33,9 +43,15 @@ public class BookService {
 	@Transactional
 	public BookDTO insert(BookDTO dto) {
 		Book entity = new Book();
-
-		copyDtoToEntity(dto, entity);
 		
+		Author author = authorRepository.getReferenceById(dto.getAuthorId());
+		author.setId(dto.getAuthorId());
+		Publisher publisher = publisherRepository.getReferenceById(dto.getPublisherId());
+		publisher.setId(dto.getId());
+		
+		copyDtoToEntity(dto, entity);
+		entity.setAuthor(author);
+		entity.setPublisher(publisher);
 		entity = repository.save(entity); 
 		
 		return new BookDTO(entity);
