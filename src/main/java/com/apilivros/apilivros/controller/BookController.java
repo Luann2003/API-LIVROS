@@ -33,9 +33,9 @@ public class BookController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<BookDTO> findById (@PathVariable Long id){
-		BookDTO BookDTO = service.findById(id);
-		return ResponseEntity.ok(BookDTO);
+	public ResponseEntity<BookAuthorDTO> findById (@PathVariable Long id){
+		BookAuthorDTO bookAuthorDTO = service.findById(id);
+		return ResponseEntity.ok(bookAuthorDTO);
 		
 	}
 	

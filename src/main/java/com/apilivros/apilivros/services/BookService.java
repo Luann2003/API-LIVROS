@@ -37,10 +37,10 @@ public class BookService {
 	}
 	
 	@Transactional(readOnly = true)
-	public BookDTO findById(Long id){
+	public BookAuthorDTO findById(Long id){
 		Book book = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
-		return new BookDTO(book);
+		return new BookAuthorDTO(book);
 	}
 	
 	@Transactional
