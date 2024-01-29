@@ -8,9 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apilivros.apilivros.dto.AuthorDTO;
 import com.apilivros.apilivros.entities.Author;
-import com.apilivros.apilivros.entities.Book;
 import com.apilivros.apilivros.repositories.AuthorRepository;
-import com.apilivros.apilivros.repositories.BookRepository;
 import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -18,9 +16,6 @@ public class AuthorService {
 	
 	@Autowired
 	private AuthorRepository repository;	
-	
-	@Autowired
-	private BookRepository bookRepository;
 	
 	@Transactional(readOnly = true)
 	public List<AuthorDTO> findAll () {
@@ -35,26 +30,4 @@ public class AuthorService {
 		return new AuthorDTO(book);
 	}
 	
-	@Transactional
-	public AuthorDTO insert(AuthorDTO dto) {
-		Author entity = new Author();
-		
-		Book book = bookRepository.getReferenceById(dto.getBookId());
-		book.setId(dto.getBookId());
-		
-		
-		copyDtoToEntity(dto, entity);
-		
-		entity.getBooks().add(book);
-		repository.save(entity); 
-		bookRepository.saveAll(entity.getBooks());
-		
-		return new AuthorDTO(entity);
-	}
-	
-	private void copyDtoToEntity(AuthorDTO dto, Author entity) {
-		entity.setName(dto.getName());
-			
-	}
-
 }
