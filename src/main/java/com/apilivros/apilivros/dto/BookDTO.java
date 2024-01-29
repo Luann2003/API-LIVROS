@@ -9,19 +9,19 @@ public class BookDTO {
 	private Long isbn;
 	private Long yearPublication;
 	
-	private Long authorId;
-	private Long publisherId;
+	private AuthorNoBooksDTO author;
 	
-	
+	private PublisherNoBooksDTO publisher;
+
 	public BookDTO() {
 	}
 
-	public BookDTO(Long id, String title, Long isbn, Long yearPublication) {
+	public BookDTO(Long id, String title, Long isbn, Long yearPublication, AuthorNoBooksDTO author) {
 		this.id = id;
 		this.title = title;
 		this.isbn = isbn;
 		this.yearPublication = yearPublication;
-		
+		this.author = author;
 	}
 
 	public BookDTO(Book entity) {
@@ -29,8 +29,8 @@ public class BookDTO {
 		title = entity.getTitle();
 		isbn = entity.getIsbn();
 		yearPublication = entity.getYearPublication();
-		authorId = entity.getAuthor().getId();
-		publisherId = entity.getPublisher().getId();
+		author = new AuthorNoBooksDTO(entity.getAuthor());
+		publisher = new PublisherNoBooksDTO(entity.getPublisher());
 	}
 
 	public Long getId() {
@@ -49,14 +49,11 @@ public class BookDTO {
 		return yearPublication;
 	}
 
-	public Long getAuthorId() {
-		return authorId;
+	public AuthorNoBooksDTO getAuthor() {
+		return author;
 	}
 
-	public Long getPublisherId() {
-		return publisherId;
+	public PublisherNoBooksDTO getPublisher() {
+		return publisher;
 	}
-	
-	
-
 }

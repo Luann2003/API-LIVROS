@@ -16,6 +16,8 @@ import com.apilivros.apilivros.repositories.BookRepository;
 import com.apilivros.apilivros.repositories.PublisherRepository;
 import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class BookService {
 	
@@ -29,9 +31,9 @@ public class BookService {
 	private PublisherRepository publisherRepository;
 	
 	@Transactional(readOnly = true)
-	public List<BookDTO> findAll () {
+	public List<BookAuthorDTO> findAll () {
 		List<Book> list = repository.findAll();
-		return list.stream().map(x -> new BookDTO(x)).toList();
+		return list.stream().map(x -> new BookAuthorDTO(x)).toList();
 	}
 	
 	@Transactional(readOnly = true)
@@ -48,11 +50,9 @@ public class BookService {
 		copyDtoToEntity(dto, entity);
 		
 		Author author = new Author();
-		author.setId(dto.getAuthor().getId());
 		author.setName(dto.getAuthor().getName());
 		author = authorRepository.save(author);
 		Publisher publisher = new Publisher();
-		publisher.setName(dto.getPublisher().getName());
 		publisher.setName(dto.getPublisher().getName());
 		publisher = publisherRepository.save(publisher);
 		
@@ -62,6 +62,26 @@ public class BookService {
 		entity = repository.save(entity); 
 		
 		return new BookAuthorDTO(entity);
+	}
+	
+	@Transactional
+	public BookAuthorDTO update(BookAuthorDTO dto, Long id) {
+		try {
+			
+			Book entity = repository.getReferenceById(id);
+			copyDtoToEntity(dto, entity);
+			
+			entity = repository.save(entity);
+			return new BookAuthorDTO(entity);
+			
+		}catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Recurso não encontrado");
+		}
+	}
+	
+	@Transactional
+	public void delete(Long id) {
+		repository.deleteById(id);
 	}
 	
 	private void copyDtoToEntity(BookAuthorDTO dto, Book entity) {

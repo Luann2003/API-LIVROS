@@ -1,35 +1,24 @@
 package com.apilivros.apilivros.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.apilivros.apilivros.entities.Author;
-import com.apilivros.apilivros.entities.Book;
 
-public class AuthorDTO {
+public class AuthorNoBooksDTO {
 	
 	private Long id;
 	private String name;
 	
-	
-	private List<BookDTO> books = new ArrayList<>();
-	
-	public AuthorDTO() {
+	public AuthorNoBooksDTO() {
 	}
 
-	public AuthorDTO(Long id, String name) {
+	public AuthorNoBooksDTO(Long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 	
-	public AuthorDTO(Author entity) {
+	public AuthorNoBooksDTO(Author entity) {
 		id = entity.getId();
 		name = entity.getName();
-		
-		for(Book book: entity.getBooks()) {
-			books.add(new BookDTO(book));
-			
-		}
+
 	}
 
 	public Long getId() {
@@ -47,10 +36,4 @@ public class AuthorDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public List<BookDTO> getBooks() {
-		return books;
-	}
-
-	
 }
