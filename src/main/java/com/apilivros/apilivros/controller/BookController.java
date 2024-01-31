@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.apilivros.apilivros.dto.BookAuthorDTO;
-import com.apilivros.apilivros.dto.BookDTO;
 import com.apilivros.apilivros.services.BookService;
 
 @RestController

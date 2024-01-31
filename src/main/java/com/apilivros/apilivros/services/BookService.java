@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apilivros.apilivros.dto.BookAuthorDTO;
-import com.apilivros.apilivros.dto.BookDTO;
 import com.apilivros.apilivros.entities.Author;
 import com.apilivros.apilivros.entities.Book;
 import com.apilivros.apilivros.entities.Publisher;
@@ -49,11 +48,11 @@ public class BookService {
 		
 		copyDtoToEntity(dto, entity);
 		
-		Author author = new Author();
-		author.setName(dto.getAuthor().getName());
+		Author author = authorRepository.getReferenceById(dto.getAuthor().getId());
+		author.setId(dto.getAuthor().getId());
 		author = authorRepository.save(author);
-		Publisher publisher = new Publisher();
-		publisher.setName(dto.getPublisher().getName());
+		Publisher publisher = publisherRepository.getReferenceById(dto.getPublisher().getId());
+		publisher.setId(dto.getPublisher().getId());
 		publisher = publisherRepository.save(publisher);
 		
 		
