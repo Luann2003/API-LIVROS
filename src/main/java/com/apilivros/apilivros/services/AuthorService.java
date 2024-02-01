@@ -11,7 +11,6 @@ import com.apilivros.apilivros.dto.BookDTO;
 import com.apilivros.apilivros.entities.Author;
 import com.apilivros.apilivros.entities.Book;
 import com.apilivros.apilivros.repositories.AuthorRepository;
-import com.apilivros.apilivros.repositories.BookRepository;
 import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -21,9 +20,6 @@ public class AuthorService {
 
 	@Autowired
 	private AuthorRepository repository;
-
-	@Autowired
-	private BookRepository bookRepository;
 
 	@Transactional(readOnly = true)
 	public List<AuthorDTO> findAll() {

@@ -1,8 +1,6 @@
 package com.apilivros.apilivros.entities;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -11,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -35,19 +33,22 @@ public class Rent {
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	@OneToMany(mappedBy = "rent")
-	private List<Book> books = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "book_id")
+	private Book book;
 	
 	public Rent() {
 	}
 
-	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, boolean devolution, User user) {
+	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, boolean devolution, User user, Book book) {
+
 		this.id = id;
 		this.price = price;
 		this.initDate = initDate;
 		this.devolutionDate = devolutionDate;
 		this.devolution = devolution;
 		this.user = user;
+		this.book = book;
 	}
 
 	public Long getId() {
@@ -98,8 +99,12 @@ public class Rent {
 		this.devolution = devolution;
 	}
 
-	public List<Book> getBooks() {
-		return books;
+	public Book getBook() {
+		return book;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
 	}
 
 	@Override
