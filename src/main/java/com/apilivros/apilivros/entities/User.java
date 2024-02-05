@@ -1,6 +1,8 @@
 package com.apilivros.apilivros.entities;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -32,21 +34,19 @@ public class User {
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 	
-	@OneToOne(mappedBy = "user")
-	private Rent rent;
+	@OneToMany(mappedBy = "user")
+	private List<Rent> rents = new ArrayList<>();
 	
 	public User() {
 	}
 
-	
 
-	public User(Long id, String email, String name, String password, Rent rent) {
+	public User(Long id, String email, String name, String password ) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.name = name;
 		this.password = password;
-		this.rent = rent;
 	}
 
 
@@ -83,12 +83,8 @@ public class User {
 		this.password = password;
 	}
 	
-	public Rent getRent() {
-		return rent;
-	}
-
-	public void setRent(Rent rent) {
-		this.rent = rent;
+	public List<Rent> getRents() {
+		return rents;
 	}
 
 	public Set<Role> getRoles() {

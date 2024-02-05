@@ -44,20 +44,34 @@ public class RentService {
 	@Transactional
 	public RentDTO insert(RentDTO dto) {
 		
-		Rent entity = new Rent();
+		//Estudar um pouco mais esse método
 
-		copyDtoToEntity(dto, entity);
-		User user = userRepository.getReferenceById(dto.getUser().getId());
-		user.setId(dto.getUser().getId());
+		// Encontrar o aluguel mais recente para o livro específico
+		Rent currentRent = repository.findTopByUserIdAndBookIdOrderByInitDateDesc(dto.getUser().getId(),dto.getBook().getId());
 
-		Book book = bookRepository.getReferenceById(dto.getBook().getId());
-		book.setId(dto.getBook().getId());
+		if (currentRent != null) {
+			currentRent.setDevolution(false);
+			repository.save(currentRent);
+		} else {
+			// Se o usuário não tiver alugado nenhum livro anteriormente,
+			// crie um novo aluguel sem marcar como devolução
+			Rent entity = new Rent();
+			copyDtoToEntity(dto, entity);
 
-		entity.setBook(book);
-		entity.setUser(user);
-		entity = repository.save(entity);
-		
-		return new RentDTO(entity);
+			User user = userRepository.getReferenceById(dto.getUser().getId());
+			user.setId(dto.getUser().getId());
+
+			Book book = bookRepository.getReferenceById(dto.getBook().getId());
+			book.setId(dto.getBook().getId());
+
+			entity.setBook(book);
+			entity.setUser(user);
+			entity = repository.save(entity);
+
+			return new RentDTO(entity);
+		}
+
+		return new RentDTO();
 	}
 
 	@Transactional
@@ -79,7 +93,7 @@ public class RentService {
 		entity.setPrice(dto.getPrice());
 		entity.setInitDate(dto.getInitDate());
 		entity.setDevolutionDate(dto.getDevolutionDate());
-		
+
 	}
 
 }
