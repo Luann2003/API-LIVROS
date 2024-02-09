@@ -74,7 +74,11 @@ public class RentService {
 		try {
 
 			Rent entity = repository.getReferenceById(id);
+			Book book = bookRepository.getReferenceById(dto.getBook().getId());
+			book.setRent(false);
 
+			entity.setBook(book);
+			entity.setDevolutionDate(dto.getDevolutionDate());
 			entity = repository.save(entity);
 			return new RentDTO(entity);
 
