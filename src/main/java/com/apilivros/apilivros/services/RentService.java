@@ -2,6 +2,8 @@ package com.apilivros.apilivros.services;
 
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,7 @@ public class RentService {
 	@Transactional(readOnly = true)
 	public List<RentDTO> findAll() {
 		List<Rent> list = repository.findAll();
-		return list.stream().map(x -> new RentDTO(x)).toList();
+		return list.stream().map(x -> new RentDTO(x)). toList();
 	}
 
 	@Transactional(readOnly = true)
@@ -44,34 +46,27 @@ public class RentService {
 	@Transactional
 	public RentDTO insert(RentDTO dto) {
 		
-		//Estudar um pouco mais esse método
-
-		// Encontrar o aluguel mais recente para o livro específico
-		Rent currentRent = repository.findTopByUserIdAndBookIdOrderByInitDateDesc(dto.getUser().getId(),dto.getBook().getId());
-
-		if (currentRent != null) {
-			currentRent.setDevolution(false);
-			repository.save(currentRent);
-		} else {
-			// Se o usuário não tiver alugado nenhum livro anteriormente,
-			// crie um novo aluguel sem marcar como devolução
 			Rent entity = new Rent();
 			copyDtoToEntity(dto, entity);
 
 			User user = userRepository.getReferenceById(dto.getUser().getId());
 			user.setId(dto.getUser().getId());
-
+			
 			Book book = bookRepository.getReferenceById(dto.getBook().getId());
-			book.setId(dto.getBook().getId());
-
-			entity.setBook(book);
+			
+			if(!book.isRent()) {
+				book.setId(dto.getBook().getId());
+				book.setRent(true);
+				entity.setBook(book);
+			}else {
+				throw new RuntimeException("O livro ja esta alugado");
+			}
+			
+			
 			entity.setUser(user);
 			entity = repository.save(entity);
 
 			return new RentDTO(entity);
-		}
-
-		return new RentDTO();
 	}
 
 	@Transactional
@@ -79,7 +74,6 @@ public class RentService {
 		try {
 
 			Rent entity = repository.getReferenceById(id);
-			entity.setDevolution(dto.isDevolution());
 
 			entity = repository.save(entity);
 			return new RentDTO(entity);
