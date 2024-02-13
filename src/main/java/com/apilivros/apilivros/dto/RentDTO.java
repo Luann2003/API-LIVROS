@@ -14,24 +14,22 @@ public class RentDTO {
 	private UserDTO user;
 
 	private BookDTO book;
-
 	
 	private boolean devolutionRent;
-
 
 	public RentDTO() {
 	}
 
-
-	public RentDTO(Long id, Double price, Instant initDate, Instant devolutionDate, UserDTO user, BookDTO book, boolean devolutionRent) {
-
+	
+	public RentDTO(Long id, Double price, Instant initDate, Instant devolutionDate, UserDTO user, BookDTO book,
+			boolean devolution) {
 		this.id = id;
 		this.price = price;
 		this.initDate = initDate;
 		this.devolutionDate = devolutionDate;
 		this.user = user;
 		this.book = book;
-		this.devolutionRent = devolutionRent;
+		this.devolutionRent = devolution;
 	}
 
 
@@ -41,8 +39,6 @@ public class RentDTO {
 		initDate = entity.getInitDate();
 		devolutionDate = entity.getDevolutionDate();
 		devolutionRent = entity.isDevolution();
-
-
 		user = new UserDTO(entity.getUser());
 		book = new BookDTO(entity.getBook());
 	}
@@ -70,11 +66,8 @@ public class RentDTO {
 	public BookDTO getBook() {
 		return book;
 	}
-
 	public boolean isDevolutionRent() {
 		return devolutionRent;
 	}
 
 }
-
-

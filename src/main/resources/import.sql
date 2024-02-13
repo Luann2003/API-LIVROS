@@ -47,14 +47,6 @@ INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, ren
 INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent) VALUES ('Cem Anos de Solidão', 9783127323207, 1967, 8, 8, 0);
 INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent) VALUES ('A Metamorfose', 9783127323207, 1915, 7, 9, 0);
 INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent) VALUES ('Ficções', 9783127323207, 1944, 6, 10, 0);
-<<<<<<< HEAD
-=======
-
-INSERT INTO tb_rent (price, init_date, devolution_date, user_id, book_id) VALUES (20.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 1, 2);
-INSERT INTO tb_rent (price, init_date, devolution_date, user_id, book_id) VALUES (40.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 2, 4);
-INSERT INTO tb_rent (price, init_date, devolution_date, user_id, book_id) VALUES (35.20, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 3, 6);
-
->>>>>>> f5e101b26cd60bd69f757b55d8199696f250aa05
 
 INSERT INTO tb_rent (price, init_date, devolution_date, user_id, book_id, devolution) VALUES (20.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 1, 2, 0);
 INSERT INTO tb_rent (price, init_date, devolution_date, user_id, book_id, devolution) VALUES (40.0, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', TIMESTAMP WITH TIME ZONE '2022-07-13T20:50:07.12345Z', 2, 4, 0);
