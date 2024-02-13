@@ -16,39 +16,40 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_book")
 public class Book {
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String title;
 	private Long isbn;
 	private Long yearPublication;
-	
+	private boolean rent;
+
 	@ManyToOne
 	@JoinColumn(name = "publisher_id")
 	private Publisher publisher;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "author_id")
 	private Author author;
-	
+
 	@OneToMany(mappedBy = "book")
-    private List<Rent> rents = new ArrayList<>();
-	
+	private List<Rent> rents = new ArrayList<>();
+
 	public Book() {
 	}
 
-	public Book(Long id, String title, Long isbn, Long yearPublication, Publisher publisher, Author author) {
+	public Book(Long id, String title, Long isbn, Long yearPublication, boolean rent, Publisher publisher,
+			Author author) {
 		this.id = id;
 		this.title = title;
 		this.isbn = isbn;
 		this.yearPublication = yearPublication;
+		this.rent = rent;
 		this.publisher = publisher;
 		this.author = author;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -97,7 +98,15 @@ public class Book {
 	public void setAuthor(Author author) {
 		this.author = author;
 	}
-	
+
+	public boolean isRent() {
+		return rent;
+	}
+
+	public void setRent(boolean rent) {
+		this.rent = rent;
+	}
+
 	public List<Rent> getRents() {
 		return rents;
 	}

@@ -40,8 +40,8 @@ public class Rent {
 	public Rent() {
 	}
 
-	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, boolean devolution, User user, Book book) {
-
+	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, boolean devolution, User user,
+			Book book) {
 		this.id = id;
 		this.price = price;
 		this.initDate = initDate;
@@ -91,20 +91,21 @@ public class Rent {
 		this.user = user;
 	}
 	
-	public boolean isDevolution() {
-		return devolution;
-	}
-
-	public void setDevolution(boolean devolution) {
-		this.devolution = devolution;
-	}
-
 	public Book getBook() {
 		return book;
 	}
 
 	public void setBook(Book book) {
 		this.book = book;
+	}
+	
+
+	public boolean isDevolution() {
+		return devolution;
+	}
+
+	public void setDevolution(boolean devolution) {
+		this.devolution = devolution;
 	}
 
 	@Override

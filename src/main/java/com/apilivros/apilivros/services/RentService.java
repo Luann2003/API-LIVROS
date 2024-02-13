@@ -1,5 +1,6 @@
 package com.apilivros.apilivros.services;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class RentService {
 	@Transactional(readOnly = true)
 	public List<RentDTO> findAll() {
 		List<Rent> list = repository.findAll();
-		return list.stream().map(x -> new RentDTO(x)).toList();
+		return list.stream().map(x -> new RentDTO(x)). toList();
 	}
 
 	@Transactional(readOnly = true)
@@ -44,34 +45,32 @@ public class RentService {
 	@Transactional
 	public RentDTO insert(RentDTO dto) {
 		
-		//Estudar um pouco mais esse método
-
-		// Encontrar o aluguel mais recente para o livro específico
-		Rent currentRent = repository.findTopByUserIdAndBookIdOrderByInitDateDesc(dto.getUser().getId(),dto.getBook().getId());
-
-		if (currentRent != null) {
-			currentRent.setDevolution(false);
-			repository.save(currentRent);
-		} else {
-			// Se o usuário não tiver alugado nenhum livro anteriormente,
-			// crie um novo aluguel sem marcar como devolução
 			Rent entity = new Rent();
-			copyDtoToEntity(dto, entity);
-
+			
 			User user = userRepository.getReferenceById(dto.getUser().getId());
 			user.setId(dto.getUser().getId());
-
+			
 			Book book = bookRepository.getReferenceById(dto.getBook().getId());
-			book.setId(dto.getBook().getId());
+			
+			 if (user.getRents().stream().anyMatch(rent -> !rent.isDevolution())) {
+			        throw new RuntimeException("O usuário já possui um livro alugado e não devolvido");
+			    }
+			 
+			copyDtoToEntity(dto, entity);
 
-			entity.setBook(book);
+			if(!book.isRent()) {
+				book.setId(dto.getBook().getId());
+				book.setRent(true);
+				entity.setBook(book);
+			}else {
+				throw new RuntimeException("O livro ja esta alugado");
+			}
+			
+			
 			entity.setUser(user);
 			entity = repository.save(entity);
 
 			return new RentDTO(entity);
-		}
-
-		return new RentDTO();
 	}
 
 	@Transactional
@@ -79,8 +78,12 @@ public class RentService {
 		try {
 
 			Rent entity = repository.getReferenceById(id);
-			entity.setDevolution(dto.isDevolution());
+			Book book = bookRepository.getReferenceById(dto.getBook().getId());
+			book.setRent(false);
 
+			entity.setDevolution(true);
+			entity.setBook(book);
+			entity.setDevolutionDate(Instant.now());
 			entity = repository.save(entity);
 			return new RentDTO(entity);
 
@@ -91,8 +94,7 @@ public class RentService {
 
 	private void copyDtoToEntity(RentDTO dto, Rent entity) {
 		entity.setPrice(dto.getPrice());
-		entity.setInitDate(dto.getInitDate());
-		entity.setDevolutionDate(dto.getDevolutionDate());
+		entity.setInitDate(Instant.now());
 
 	}
 
