@@ -34,23 +34,24 @@ public class Rent {
 	@JoinColumn(name = "book_id")
 	private Book book;
 	
+	private boolean devolution;
+	
 	
 	public Rent() {
 	}
 
-<<<<<<< HEAD
-	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, boolean devolution, User user,
-			Book book) {
-=======
-	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate,User user, Book book) {
->>>>>>> f5e101b26cd60bd69f757b55d8199696f250aa05
+	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, User user, Book book,
+			boolean devolution) {
 		this.id = id;
 		this.price = price;
 		this.initDate = initDate;
 		this.devolutionDate = devolutionDate;
 		this.user = user;
 		this.book = book;
+		this.devolution = devolution;
 	}
+
+
 
 	public Long getId() {
 		return id;

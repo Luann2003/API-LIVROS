@@ -3,8 +3,6 @@ package com.apilivros.apilivros.services;
 import java.time.Instant;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,16 +51,14 @@ public class RentService {
 			user.setId(dto.getUser().getId());
 			
 			Book book = bookRepository.getReferenceById(dto.getBook().getId());
-			
-<<<<<<< HEAD
+
 			 if (user.getRents().stream().anyMatch(rent -> !rent.isDevolution())) {
 			        throw new RuntimeException("O usuário já possui um livro alugado e não devolvido");
 			    }
 			 
 			copyDtoToEntity(dto, entity);
 
-=======
->>>>>>> f5e101b26cd60bd69f757b55d8199696f250aa05
+
 			if(!book.isRent()) {
 				book.setId(dto.getBook().getId());
 				book.setRent(true);
@@ -86,14 +82,14 @@ public class RentService {
 			Book book = bookRepository.getReferenceById(dto.getBook().getId());
 			book.setRent(false);
 
-<<<<<<< HEAD
+
 			entity.setDevolution(true);
 			entity.setBook(book);
 			entity.setDevolutionDate(Instant.now());
-=======
+
 			entity.setBook(book);
 			entity.setDevolutionDate(dto.getDevolutionDate());
->>>>>>> f5e101b26cd60bd69f757b55d8199696f250aa05
+
 			entity = repository.save(entity);
 			return new RentDTO(entity);
 

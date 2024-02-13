@@ -48,8 +48,7 @@ public class BookDTO {
 	public boolean isRent() {
 		return rent;
 	}
-<<<<<<< HEAD
+
+
 }
-=======
-}
->>>>>>> f5e101b26cd60bd69f757b55d8199696f250aa05
+
