@@ -26,8 +26,6 @@ public class Rent {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant devolutionDate;
 	
-	private boolean devolution;
-	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -40,13 +38,16 @@ public class Rent {
 	public Rent() {
 	}
 
+<<<<<<< HEAD
 	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate, boolean devolution, User user,
 			Book book) {
+=======
+	public Rent(Long id, Double price, Instant initDate, Instant devolutionDate,User user, Book book) {
+>>>>>>> f5e101b26cd60bd69f757b55d8199696f250aa05
 		this.id = id;
 		this.price = price;
 		this.initDate = initDate;
 		this.devolutionDate = devolutionDate;
-		this.devolution = devolution;
 		this.user = user;
 		this.book = book;
 	}
