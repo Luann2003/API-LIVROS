@@ -76,15 +76,12 @@ public class RentService {
 		try {
 
 			Rent entity = repository.getReferenceById(id);
-			Book book = bookRepository.getReferenceById(dto.getBook().getId());
+			Book book = entity.getBook();
 			book.setRent(false);
 
 			entity.setDevolution(true);
-			entity.setBook(book);
 			entity.setDevolutionDate(Instant.now());
 
-			entity.setBook(book);
-			entity.setDevolutionDate(Instant.now());
 
 			entity = repository.save(entity);
 			return new RentDTO(entity);
@@ -92,6 +89,11 @@ public class RentService {
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
+	}
+	
+	@Transactional
+	public void delete(Long id) {
+		repository.deleteById(id);
 	}
 
 	private void copyDtoToEntity(RentDTO dto, Rent entity) {
