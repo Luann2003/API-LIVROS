@@ -47,7 +47,7 @@ public class RentController {
 	}
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<RentDTO> update (@PathVariable Long id, @RequestBody RentDTO dto){
-		dto = service.update(dto, id);
+		dto = service.update(id, dto);
 		return ResponseEntity.ok(dto);
 	}
 	

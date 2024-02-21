@@ -77,7 +77,7 @@ public class RentService {
 	}
 
 	@Transactional
-	public RentDTO update(RentDTO dto, Long id) {
+	public RentDTO update(Long id, RentDTO dto) {
 	    try {
 	        Rent entity = repository.getReferenceById(id);
 	        Book book = entity.getBook();
