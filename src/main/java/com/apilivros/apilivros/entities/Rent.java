@@ -25,6 +25,8 @@ public class Rent {
 	private Instant initDate;
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant devolutionDate;
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant expectedReturnDate; 
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -101,6 +103,13 @@ public class Rent {
 		this.book = book;
 	}
 	
+	public Instant getExpectedReturnDate() {
+		return expectedReturnDate;
+	}
+
+	public void setExpectedReturnDate(Instant expectedReturnDate) {
+		this.expectedReturnDate = expectedReturnDate;
+	}
 
 	public boolean isDevolution() {
 		return devolution;
@@ -127,5 +136,7 @@ public class Rent {
 		return Objects.equals(id, other.id);
 	}
 	
-
+	 public void applyFine(double amount) {
+		 price = amount;
+	 }
 }

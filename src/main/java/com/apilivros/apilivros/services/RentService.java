@@ -1,6 +1,8 @@
 package com.apilivros.apilivros.services;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +57,14 @@ public class RentService {
 		if (user.getRents().stream().anyMatch(rent -> !rent.isDevolution())) {
 			throw new RuntimeException("O usuário já possui um livro alugado e não devolvido");
 		}
-
+		
+		Instant now = Instant.now();
+		Instant expectedReturnDate = now.plus(Duration.ofDays(7));
 		if (!book.isRent()) {
 			book.setId(dto.getBook().getId());
 			book.setRent(true);
 			entity.setBook(book);
+			entity.setExpectedReturnDate(expectedReturnDate);
 			copyDtoToEntity(dto, entity);
 		} else {
 			throw new RuntimeException("O livro ja esta alugado");
@@ -73,31 +78,36 @@ public class RentService {
 
 	@Transactional
 	public RentDTO update(RentDTO dto, Long id) {
-		try {
+	    try {
+	        Rent entity = repository.getReferenceById(id);
+	        Book book = entity.getBook();
+	        book.setRent(false);
 
-			Rent entity = repository.getReferenceById(id);
-			Book book = entity.getBook();
-			book.setRent(false);
-
-			entity.setDevolution(true);
-			entity.setDevolutionDate(Instant.now());
+	        entity.setDevolution(true);
+	        entity.setDevolutionDate(dto.getDevolutionDate());
 
 
-			entity = repository.save(entity);
-			return new RentDTO(entity);
+	        //Podemos utilizar o Instant para obtermos a data atual da devolução
+	        
+	        if (dto.getDevolutionDate().isAfter(entity.getExpectedReturnDate())) {
+	            long daysLate = ChronoUnit.DAYS.between(entity.getExpectedReturnDate(), dto.getDevolutionDate());
+	            double fineAmount = daysLate * 5.0; // R$ 5 por dia de atraso
+	            entity.applyFine(fineAmount); // Aplica a multa ao preço do aluguel
+	        }
 
-		} catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Recurso não encontrado");
-		}
+	        entity = repository.save(entity);
+	        return new RentDTO(entity);
+	    } catch (EntityNotFoundException e) {
+	        throw new ResourceNotFoundException("Recurso não encontrado");
+	    }
 	}
-	
+
 	@Transactional
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
 
 	private void copyDtoToEntity(RentDTO dto, Rent entity) {
-		entity.setPrice(dto.getPrice());
 		entity.setInitDate(Instant.now());
 
 	}
