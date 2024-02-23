@@ -3,7 +3,9 @@ package com.apilivros.apilivros.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apilivros.apilivros.dto.AuthorDTO;
@@ -11,6 +13,7 @@ import com.apilivros.apilivros.dto.BookDTO;
 import com.apilivros.apilivros.entities.Author;
 import com.apilivros.apilivros.entities.Book;
 import com.apilivros.apilivros.repositories.AuthorRepository;
+import com.apilivros.apilivros.services.exceptions.DatabaseException;
 import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -61,10 +64,18 @@ public class AuthorService {
 		}
 	}
 	
-	@Transactional
-	public void delete(Long id) {
-		repository.deleteById(id);
-	}
+	@Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(Long id) {
+    	if (!repository.existsById(id)) {
+    		throw new ResourceNotFoundException("Recurso não encontrado");
+    	}
+    	try {
+            repository.deleteById(id);    		
+    	}
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha de integridade referencial");
+        }
+    }
 
 	private void copyDtoToEntity(AuthorDTO dto, Author entity) {
 		entity.setName(dto.getName());

@@ -16,6 +16,7 @@ import com.apilivros.apilivros.entities.User;
 import com.apilivros.apilivros.repositories.BookRepository;
 import com.apilivros.apilivros.repositories.RentRepository;
 import com.apilivros.apilivros.repositories.UserRepository;
+import com.apilivros.apilivros.services.exceptions.DatabaseException;
 import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -50,61 +51,58 @@ public class RentService {
 		Rent entity = new Rent();
 
 		User user = userRepository.getReferenceById(dto.getUser().getId());
-		user.setId(dto.getUser().getId());
-
 		Book book = bookRepository.getReferenceById(dto.getBook().getId());
 
-		if (user.getRents().stream().anyMatch(rent -> !rent.isDevolution())) {
-			throw new RuntimeException("O usuário já possui um livro alugado e não devolvido");
-		}
-		
-		Instant now = Instant.now();
-		Instant expectedReturnDate = now.plus(Duration.ofDays(7));
-		if (!book.isRent()) {
-			book.setId(dto.getBook().getId());
-			book.setRent(true);
-			entity.setBook(book);
-			entity.setExpectedReturnDate(expectedReturnDate);
-			copyDtoToEntity(dto, entity);
-		} else {
-			throw new RuntimeException("O livro ja esta alugado");
-		}
+		try {
 
-		entity.setUser(user);
-		entity = repository.save(entity);
+			user.setId(dto.getUser().getId());
+			if (user.getRents().stream().anyMatch(rent -> !rent.isDevolution())) {
+				throw new DatabaseException("O usuário já possui um livro alugado");
+			}
 
+			Instant now = Instant.now();
+			Instant expectedReturnDate = now.plus(Duration.ofDays(7));
+			if (!book.isRent()) {
+				book.setId(dto.getBook().getId());
+				book.setRent(true);
+				entity.setBook(book);
+				entity.setExpectedReturnDate(expectedReturnDate);
+				copyDtoToEntity(dto, entity);
+			} else {
+				throw new DatabaseException("O livro ja esta alugado");
+			}
+
+			entity.setUser(user);
+			entity = repository.save(entity);
+		} catch (EntityNotFoundException e) {
+			throw new DatabaseException("User ou Book não encontrado");
+		}
 		return new RentDTO(entity);
 	}
 
 	@Transactional
 	public RentDTO update(Long id, RentDTO dto) {
-	    try {
-	        Rent entity = repository.getReferenceById(id);
-	        Book book = entity.getBook();
-	        book.setRent(false);
+		try {
+			Rent entity = repository.getReferenceById(id);
+			Book book = entity.getBook();
+			book.setRent(false);
 
-	        entity.setDevolution(true);
-	        entity.setDevolutionDate(dto.getDevolutionDate());
+			entity.setDevolution(true);
+			entity.setDevolutionDate(dto.getDevolutionDate());
 
+			// Podemos utilizar o Instant para obtermos a data atual da devolução
 
-	        //Podemos utilizar o Instant para obtermos a data atual da devolução
-	        
-	        if (dto.getDevolutionDate().isAfter(entity.getExpectedReturnDate())) {
-	            long daysLate = ChronoUnit.DAYS.between(entity.getExpectedReturnDate(), dto.getDevolutionDate());
-	            double fineAmount = daysLate * 5.0; // R$ 5 por dia de atraso
-	            entity.applyFine(fineAmount); // Aplica a multa ao preço do aluguel
-	        }
+			if (dto.getDevolutionDate().isAfter(entity.getExpectedReturnDate())) {
+				long daysLate = ChronoUnit.DAYS.between(entity.getExpectedReturnDate(), dto.getDevolutionDate());
+				double fineAmount = daysLate * 5.0; // R$ 5 por dia de atraso
+				entity.applyFine(fineAmount); // Aplica a multa ao preço do aluguel
+			}
 
-	        entity = repository.save(entity);
-	        return new RentDTO(entity);
-	    } catch (EntityNotFoundException e) {
-	        throw new ResourceNotFoundException("Recurso não encontrado");
-	    }
-	}
-
-	@Transactional
-	public void delete(Long id) {
-		repository.deleteById(id);
+			entity = repository.save(entity);
+			return new RentDTO(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Recurso não encontrado");
+		}
 	}
 
 	private void copyDtoToEntity(RentDTO dto, Rent entity) {

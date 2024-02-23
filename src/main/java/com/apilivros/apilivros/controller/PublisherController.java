@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,30 +15,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.apilivros.apilivros.dto.RentDTO;
-import com.apilivros.apilivros.services.RentService;
+import com.apilivros.apilivros.dto.PublisherDTO;
+import com.apilivros.apilivros.services.PublisherService;
 
 @RestController
-@RequestMapping(value = "/rent")
-public class RentController {
-
+@RequestMapping(value = "/publisher")
+public class PublisherController {
+	
 	@Autowired
-	private RentService service;
+	private PublisherService service;
 	
 	@GetMapping
-	public ResponseEntity<List<RentDTO>> findAll(){
-		List<RentDTO> result = service.findAll();
+	public ResponseEntity<List<PublisherDTO>> findAll(){
+		List<PublisherDTO> result = service.findAll();
 		return ResponseEntity.ok().body(result);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<RentDTO> findById (@PathVariable Long id){
-		RentDTO rentDTO = service.findById(id);
-		return ResponseEntity.ok(rentDTO);
+	public ResponseEntity<PublisherDTO> findById (@PathVariable Long id){
+		PublisherDTO bookDTO = service.findById(id);
+		return ResponseEntity.ok(bookDTO);
 	}
 	
 	@PostMapping
-	public ResponseEntity<RentDTO> insert (@RequestBody RentDTO dto){
+	public ResponseEntity<PublisherDTO> insert (@RequestBody PublisherDTO dto){
 		dto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
@@ -45,8 +46,13 @@ public class RentController {
 		
 	}
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<RentDTO> update (@PathVariable Long id, @RequestBody RentDTO dto){
-		dto = service.update(id, dto);
+	public ResponseEntity<PublisherDTO> update (@PathVariable Long id, @RequestBody PublisherDTO dto){
+		dto = service.update(dto, id);
 		return ResponseEntity.ok(dto);
+	}
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<PublisherDTO> delete (@PathVariable Long id){
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }
