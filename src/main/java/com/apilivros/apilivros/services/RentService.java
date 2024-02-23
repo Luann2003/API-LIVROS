@@ -88,7 +88,12 @@ public class RentService {
 			book.setRent(false);
 
 			entity.setDevolution(true);
-			entity.setDevolutionDate(dto.getDevolutionDate());
+			
+			if(dto.getDevolutionDate().isAfter(entity.getInitDate())) {
+				entity.setDevolutionDate(dto.getDevolutionDate());
+			}else {
+				throw new DatabaseException("Favor entrar com uma data posterior a data inicial");
+			}
 
 			// Podemos utilizar o Instant para obtermos a data atual da devolução
 
