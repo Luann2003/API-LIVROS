@@ -49,4 +49,10 @@ public class RentController {
 		dto = service.update(id, dto);
 		return ResponseEntity.ok(dto);
 	}
+	
+	@PutMapping(value = "/expected/{id}")
+	public ResponseEntity<RentDTO> updateExpectedReturnDate (@PathVariable Long id, @RequestBody RentDTO dto){
+		dto = service.updateExpectedReturnDate(id, dto);
+		return ResponseEntity.ok(dto);
+	}
 }

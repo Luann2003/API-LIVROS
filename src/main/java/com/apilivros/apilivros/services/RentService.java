@@ -88,10 +88,10 @@ public class RentService {
 			book.setRent(false);
 
 			entity.setDevolution(true);
-			
-			if(dto.getDevolutionDate().isAfter(entity.getInitDate())) {
+
+			if (dto.getDevolutionDate().isAfter(entity.getInitDate())) {
 				entity.setDevolutionDate(dto.getDevolutionDate());
-			}else {
+			} else {
 				throw new DatabaseException("Favor entrar com uma data posterior a data inicial");
 			}
 
@@ -108,6 +108,19 @@ public class RentService {
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
+	}
+
+	@Transactional
+	public RentDTO updateExpectedReturnDate(Long id, RentDTO dto) {
+		Rent entity = repository.getReferenceById(id);
+
+		Instant expectedReturnDate = entity.getExpectedReturnDate().plus(Duration.ofDays(7));
+		entity.setExpectedReturnDate(expectedReturnDate);
+
+		entity = repository.save(entity);
+
+		return new RentDTO(entity);
+
 	}
 
 	private void copyDtoToEntity(RentDTO dto, Rent entity) {
