@@ -2,12 +2,15 @@ package com.apilivros.apilivros.dto;
 
 import com.apilivros.apilivros.entities.Book;
 
+
 public class BookAuthorDTO {
 	
 	private Long id;
 	private String title;
 	private Long isbn;
 	private Long yearPublication;
+	
+	private boolean rent;
 	
 	private AuthorNoBooksDTO author;
 	
@@ -16,11 +19,12 @@ public class BookAuthorDTO {
 	public BookAuthorDTO() {
 	}
 
-	public BookAuthorDTO(Long id, String title, Long isbn, Long yearPublication,AuthorNoBooksDTO author, PublisherNoBooksDTO publisher) {
+	public BookAuthorDTO(Long id, String title, Long isbn, Long yearPublication, boolean rent, AuthorNoBooksDTO author, PublisherNoBooksDTO publisher) {
 		this.id = id;
 		this.title = title;
 		this.isbn = isbn;
 		this.yearPublication = yearPublication;
+		this.rent = rent;
 		this.author = author;
 		this.publisher = publisher;
 	}
@@ -30,6 +34,7 @@ public class BookAuthorDTO {
 		title = entity.getTitle();
 		isbn = entity.getIsbn();
 		yearPublication = entity.getYearPublication();
+		rent = entity.isRent();
 		author = new AuthorNoBooksDTO(entity.getAuthor());
 		publisher = new PublisherNoBooksDTO(entity.getPublisher());
 	}
@@ -57,5 +62,11 @@ public class BookAuthorDTO {
 	public PublisherNoBooksDTO getPublisher() {
 		return publisher;
 	}
+
+	public boolean isRent() {
+		return rent;
+	}
+	
+	
 	
 }
