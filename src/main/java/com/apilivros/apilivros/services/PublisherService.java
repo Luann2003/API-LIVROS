@@ -1,9 +1,9 @@
 package com.apilivros.apilivros.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +23,9 @@ public class PublisherService {
 	private PublisherRepository repository;
 
 	@Transactional(readOnly = true)
-	public List<PublisherDTO> findAll() {
-		List<Publisher> list = repository.findAll();
-		return list.stream().map(x -> new PublisherDTO(x)).toList();
+	public Page<PublisherDTO> findAll(String name, Pageable pageable) {
+		Page<Publisher> list = repository.searchByName(name, pageable);
+		return list.map(x -> new PublisherDTO(x));
 	}
 
 	@Transactional(readOnly = true)

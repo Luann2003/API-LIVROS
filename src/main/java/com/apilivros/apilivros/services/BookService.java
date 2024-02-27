@@ -32,11 +32,16 @@ public class BookService {
 	@Autowired
 	private PublisherRepository publisherRepository;
 
-	@Transactional(readOnly = true)
-	public Page<BookAuthorDTO> findAll(String name, Pageable pageable) {
-		Page<Book> list = repository.searchByName(name, pageable);
-		return list.map(x -> new BookAuthorDTO(x));
-	}
+	   @Transactional(readOnly = true)
+	    public Page<BookAuthorDTO> findAll(String name, Pageable pageable) {
+	        long startTime = System.currentTimeMillis(); // Registro do tempo de início da consulta
+	        Page<Book> list = repository.searchByName(name, pageable); // Execução da consulta
+	        long endTime = System.currentTimeMillis(); // Registro do tempo de término da consulta
+	        long totalTime = endTime - startTime; // Cálculo da diferença de tempo
+	        System.out.println("Tempo de resposta da consulta: " + totalTime + " milissegundos"); // Exibição do tempo total de execução
+
+	        return list.map(x -> new BookAuthorDTO(x));
+	    }
 
 	@Transactional(readOnly = true)
 	public BookAuthorDTO findById(Long id) {
