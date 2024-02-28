@@ -44,7 +44,6 @@ public class PublisherService {
 
 		entity = repository.save(entity);
 		return new PublisherDTO(entity);
-
 	}
 
 	@Transactional

@@ -10,10 +10,9 @@ import com.apilivros.apilivros.entities.Book;
 
 public interface BookRepository extends JpaRepository<Book, Long>{
 	
-	@Query("SELECT b " +
-            "FROM Book b " +
-            "JOIN FETCH b.author " +
-            "JOIN FETCH b.publisher " +
-            "WHERE b.title LIKE %:name%")
+	@Query("SELECT b FROM Book b " +
+	           "JOIN FETCH b.author " +
+	           "JOIN FETCH b.publisher " +
+	           "WHERE UPPER(b.title) LIKE UPPER(CONCAT('%', :name, '%'))")
     Page<Book> searchByName(@Param("name") String name, Pageable pageable);
 }

@@ -34,12 +34,7 @@ public class BookService {
 
 	   @Transactional(readOnly = true)
 	    public Page<BookAuthorDTO> findAll(String name, Pageable pageable) {
-	        long startTime = System.currentTimeMillis(); // Registro do tempo de início da consulta
-	        Page<Book> list = repository.searchByName(name, pageable); // Execução da consulta
-	        long endTime = System.currentTimeMillis(); // Registro do tempo de término da consulta
-	        long totalTime = endTime - startTime; // Cálculo da diferença de tempo
-	        System.out.println("Tempo de resposta da consulta: " + totalTime + " milissegundos"); // Exibição do tempo total de execução
-
+	        Page<Book> list = repository.searchByName(name, pageable); 
 	        return list.map(x -> new BookAuthorDTO(x));
 	    }
 
@@ -55,12 +50,15 @@ public class BookService {
 
 		try {
 			copyDtoToEntity(dto, entity);
+			
 			Author author = authorRepository.getReferenceById(dto.getAuthor().getId());
 			author.setId(dto.getAuthor().getId());
 			author = authorRepository.save(author);
+			
 			Publisher publisher = publisherRepository.getReferenceById(dto.getPublisher().getId());
 			publisher.setId(dto.getPublisher().getId());
 			publisher = publisherRepository.save(publisher);
+			
 			entity.setAuthor(author);
 			entity.setPublisher(publisher);
 			entity = repository.save(entity);
@@ -102,7 +100,6 @@ public class BookService {
 		entity.setIsbn(dto.getIsbn());
 		entity.setTitle(dto.getTitle());
 		entity.setYearPublication(dto.getYearPublication());
-
 	}
 
 }

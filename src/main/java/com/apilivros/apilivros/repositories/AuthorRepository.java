@@ -10,9 +10,7 @@ import com.apilivros.apilivros.entities.Author;
 
 public interface AuthorRepository extends JpaRepository<Author, Long>{
 
-	@Query("SELECT DISTINCT a " +
-		       "FROM Author a " +
-		       "JOIN FETCH a.books b " +
-		       "WHERE a.name LIKE %:name%")
-		Page<Author> searchByName(@Param("name") String name, Pageable pageable);
+	@Query("SELECT DISTINCT a FROM Author a JOIN FETCH a.books b " +
+	           "WHERE UPPER(a.name) LIKE UPPER(CONCAT('%', :name, '%'))")
+	    Page<Author> searchByName(@Param("name") String name, Pageable pageable);
 }

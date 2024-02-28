@@ -3,9 +3,10 @@ package com.apilivros.apilivros.services;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +35,9 @@ public class RentService {
 	private BookRepository bookRepository;
 
 	@Transactional(readOnly = true)
-	public List<RentDTO> findAll() {
-		List<Rent> list = repository.findAll();
-		return list.stream().map(x -> new RentDTO(x)).toList();
+	public Page<RentDTO> findAll(String name, Pageable pageable) {
+		Page<Rent> list = repository.searchByName(name, pageable);
+		return list.map(x -> new RentDTO(x));
 	}
 
 	@Transactional(readOnly = true)

@@ -1,9 +1,10 @@
 package com.apilivros.apilivros.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +26,8 @@ public class RentController {
 	private RentService service;
 	
 	@GetMapping
-	public ResponseEntity<List<RentDTO>> findAll(){
-		List<RentDTO> result = service.findAll();
+	public ResponseEntity<Page<RentDTO>> findAll(String name, Pageable pageable){
+		Page<RentDTO> result = service.findAll(name, pageable);
 		return ResponseEntity.ok().body(result);
 	}
 	
