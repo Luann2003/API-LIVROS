@@ -154,6 +154,7 @@ public class AuthorizationServerConfig {
 			CustomUserAuthorities user = (CustomUserAuthorities) principal.getDetails();
 			List<String> authorities = user.getAuthorities().stream().map(x -> x.getAuthority()).toList();
 			if (context.getTokenType().getValue().equals("access_token")) {
+				//gera um token com as informações no claim
 				// @formatter:off
 				context.getClaims()
 					.claim("authorities", authorities)
