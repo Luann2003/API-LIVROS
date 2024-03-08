@@ -1,6 +1,5 @@
 package com.apilivros.apilivros.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -21,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.apilivros.apilivros.dto.BookAuthorDTO;
 import com.apilivros.apilivros.dto.RentDTO;
 import com.apilivros.apilivros.entities.Book;
 import com.apilivros.apilivros.entities.Rent;
@@ -52,12 +50,12 @@ public class RentServiceTests {
 	@Mock
 	private BookRepository bookRepository;
 
-	private Long existingId, nonExistingId, dependentId;
+	private Long existingId, nonExistingId;
 
 	private PageImpl<Rent> page;
 
 	private Book book;
-	private BookAuthorDTO bookAuthorDTO;
+
 
 	private User user;
 
@@ -71,10 +69,8 @@ public class RentServiceTests {
 
 		existingId = 1L;
 		nonExistingId = 100L;
-		dependentId = 2L;
 
 		book = BookFactory.createdBook();
-		bookAuthorDTO = BookFactory.createdBookAuthorDTO();
 
 		rent = RentFactory.createRent();
 		rentDTO = RentFactory.createRentDTO();
