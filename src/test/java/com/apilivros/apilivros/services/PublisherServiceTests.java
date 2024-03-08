@@ -21,30 +21,29 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.apilivros.apilivros.dto.AuthorDTO;
-import com.apilivros.apilivros.entities.Author;
-import com.apilivros.apilivros.factory.AuthorFactory;
-import com.apilivros.apilivros.repositories.AuthorRepository;
+import com.apilivros.apilivros.dto.PublisherDTO;
+import com.apilivros.apilivros.entities.Publisher;
+import com.apilivros.apilivros.factory.PublisherFactory;
+import com.apilivros.apilivros.repositories.PublisherRepository;
 import com.apilivros.apilivros.services.exceptions.DatabaseException;
 import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(SpringExtension.class)
-public class AuthorServiceTests {
-	
+public class PublisherServiceTests {
 	@InjectMocks
-	private AuthorService service;
+	private PublisherService service;
 	
 	@Mock
-	private AuthorRepository repository;
+	private PublisherRepository repository;
 	
 	private Long existingId, nonExistingId, dependentId;
 	
-	private Author author;
-	private AuthorDTO dto;
+	private Publisher author;
+	private PublisherDTO dto;
 	
-	private PageImpl<Author> page;
+	private PageImpl<Publisher> page;
 	
 	String name;
 	
@@ -55,8 +54,8 @@ public class AuthorServiceTests {
 		nonExistingId = 100L;
 		dependentId = 2L;
 		
-		author = AuthorFactory.createdAuthor();
-		dto = AuthorFactory.createdAuthorDTO();
+		author = PublisherFactory.createdPublisher();
+		dto = PublisherFactory.createdPublisherDTO();
 		page = new PageImpl<>(List.of(author));
 		
 		name = "teste50";
@@ -80,20 +79,20 @@ public class AuthorServiceTests {
 	}
 	
 	@Test
-	public void findAllShouldReturnPagedAuthorDTO() {
+	public void findAllShouldReturnPagedPublisherDTO() {
 		
 		Pageable pageable = PageRequest.of(0, 5);
 		
-		Page<AuthorDTO> result = service.findAll(name, pageable);
+		Page<PublisherDTO> result = service.findAll(name, pageable);
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getSize(), 1);
 		Assertions.assertEquals(result.iterator().next().getName(), name);
 	}
 	
 	@Test
-	public void findByIdShoulReturnAuthorDTOWhenIdExisting() {
+	public void findByIdShoulReturnPublisherDTOWhenIdExisting() {
 		
-		AuthorDTO result = service.findById(existingId);
+		PublisherDTO result = service.findById(existingId);
 		
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getId(), existingId);
@@ -104,25 +103,25 @@ public class AuthorServiceTests {
 	public void findByIdShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
 		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
 			@SuppressWarnings("unused")
-			AuthorDTO result = service.findById(nonExistingId);
+			PublisherDTO result = service.findById(nonExistingId);
 		});
 	}
 	
 	@Test
-	public void insertShouldReturnAuthorDTO() {
+	public void insertShouldReturnPublisherDTO() {
 
-		AuthorService serviceSpy = Mockito.spy(service);
-		AuthorDTO result = serviceSpy.insert(dto);
+		PublisherService serviceSpy = Mockito.spy(service);
+		PublisherDTO result = serviceSpy.insert(dto);
 
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getId(), existingId);
 	}
 	
 	@Test
-	public void updateShouldReturnAuthorDTOWhenIdExists() {
+	public void updateShouldReturnPublisherDTOWhenIdExists() {
 
-		AuthorService serviceSpy = Mockito.spy(service);
-		AuthorDTO result = serviceSpy.update(dto, existingId);
+		PublisherService serviceSpy = Mockito.spy(service);
+		PublisherDTO result = serviceSpy.update(dto, existingId);
 
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getId(), existingId);
@@ -131,11 +130,11 @@ public class AuthorServiceTests {
 	@Test
 	public void updateShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
 
-		AuthorService serviceSpy = Mockito.spy(service);
+		PublisherService serviceSpy = Mockito.spy(service);
 
 		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
 			@SuppressWarnings("unused")
-			AuthorDTO result = serviceSpy.update(dto, nonExistingId);
+			PublisherDTO result = serviceSpy.update(dto, nonExistingId);
 		});
 	}
 	

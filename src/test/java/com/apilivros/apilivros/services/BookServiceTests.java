@@ -21,79 +21,108 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.apilivros.apilivros.dto.AuthorDTO;
+import com.apilivros.apilivros.dto.BookAuthorDTO;
 import com.apilivros.apilivros.entities.Author;
+import com.apilivros.apilivros.entities.Book;
+import com.apilivros.apilivros.entities.Publisher;
 import com.apilivros.apilivros.factory.AuthorFactory;
+import com.apilivros.apilivros.factory.BookFactory;
+import com.apilivros.apilivros.factory.PublisherFactory;
 import com.apilivros.apilivros.repositories.AuthorRepository;
+import com.apilivros.apilivros.repositories.BookRepository;
+import com.apilivros.apilivros.repositories.PublisherRepository;
 import com.apilivros.apilivros.services.exceptions.DatabaseException;
 import com.apilivros.apilivros.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(SpringExtension.class)
-public class AuthorServiceTests {
-	
+public class BookServiceTests {
+
 	@InjectMocks
-	private AuthorService service;
+	private BookService service;
 	
 	@Mock
-	private AuthorRepository repository;
+	private BookRepository repository;
+	
+	@Mock
+	private PublisherRepository publisherRepository;
+	
+	@Mock
+	private AuthorRepository authorRepository;
 	
 	private Long existingId, nonExistingId, dependentId;
 	
-	private Author author;
-	private AuthorDTO dto;
+	private PageImpl<Book> page;
+	private Book book;
+	private BookAuthorDTO bookAuthorDTO;
 	
-	private PageImpl<Author> page;
+	private Author author;
+	
+	private Publisher publisher;
+
 	
 	String name;
 	
 	@BeforeEach
-	void setup() throws Exception {
+	void setup() {
 		
 		existingId = 1L;
 		nonExistingId = 100L;
 		dependentId = 2L;
 		
-		author = AuthorFactory.createdAuthor();
-		dto = AuthorFactory.createdAuthorDTO();
-		page = new PageImpl<>(List.of(author));
+		book = BookFactory.createdBook();
+		bookAuthorDTO = BookFactory.createdBookAuthorDTO();
 		
-		name = "teste50";
+		author = AuthorFactory.createdAuthor();
+		
+		publisher = PublisherFactory.createdPublisher();
+		
+		page = new PageImpl<>(List.of(book));
+		
+		name = "testTitle";
 		
 		Mockito.when(repository.searchByName(eq(name), any())).thenReturn(page);
 		
-		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(author));
+		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(book));
 		Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
 		
-		Mockito.when(repository.save(any())).thenReturn(author);
+		Mockito.when(repository.getReferenceById(existingId)).thenReturn(book);
+		Mockito.when(authorRepository.getReferenceById(existingId)).thenReturn(author);
+		Mockito.when(publisherRepository.getReferenceById(existingId)).thenReturn(publisher);
 		
-		Mockito.when(repository.getReferenceById(existingId)).thenReturn(author);
 		Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
+		Mockito.when(authorRepository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
+		Mockito.when(publisherRepository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
+
+		
+		Mockito.when(repository.save(any())).thenReturn(book);
 		
 		Mockito.doNothing().when(repository).deleteById(existingId);
 		Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
 		
 		Mockito.when(repository.existsById(existingId)).thenReturn(true);
 		Mockito.when(repository.existsById(nonExistingId)).thenReturn(false);
-		Mockito.when(repository.existsById(dependentId)).thenReturn(true);
+		Mockito.when(repository.existsById(dependentId)).thenReturn(true);	
+		
 	}
 	
 	@Test
-	public void findAllShouldReturnPagedAuthorDTO() {
+	public void findAllShouldReturnPageBookAuthorDTO() {
 		
 		Pageable pageable = PageRequest.of(0, 5);
 		
-		Page<AuthorDTO> result = service.findAll(name, pageable);
+		Page<BookAuthorDTO> result = service.findAll(name, pageable);
+		
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getSize(), 1);
-		Assertions.assertEquals(result.iterator().next().getName(), name);
+		Assertions.assertEquals(result.iterator().next().getTitle(), name);
 	}
 	
 	@Test
-	public void findByIdShoulReturnAuthorDTOWhenIdExisting() {
+	public void findByIdShouldReturnWhenIdExists() {
 		
-		AuthorDTO result = service.findById(existingId);
+		BookAuthorDTO result = service.findById(existingId);
 		
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getId(), existingId);
@@ -102,27 +131,41 @@ public class AuthorServiceTests {
 	
 	@Test
 	public void findByIdShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
+		
 		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
 			@SuppressWarnings("unused")
-			AuthorDTO result = service.findById(nonExistingId);
+			BookAuthorDTO result = service.findById(nonExistingId);
 		});
 	}
 	
 	@Test
-	public void insertShouldReturnAuthorDTO() {
-
-		AuthorService serviceSpy = Mockito.spy(service);
-		AuthorDTO result = serviceSpy.insert(dto);
-
+	public void insertShouldReturnBookAuthorDTO(){
+		
+		BookService serviceSpy = Mockito.spy(service);
+		BookAuthorDTO result = serviceSpy.insert(bookAuthorDTO);
+		
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getId(), existingId);
+		
 	}
 	
 	@Test
-	public void updateShouldReturnAuthorDTOWhenIdExists() {
+	public void insertShouldReturnDatabaseExceptionWhenAuthorOrPublisherIdNoExists() {
+		
+		BookService serviceSpy = Mockito.spy(service);
+		Mockito.when(repository.save(any())).thenThrow(EntityNotFoundException.class);
+		
+		Assertions.assertThrows(DatabaseException.class, () -> {
+			@SuppressWarnings("unused")
+			BookAuthorDTO result = serviceSpy.insert(bookAuthorDTO);
+		});
+	}
+	
+	@Test
+	public void updateShouldReturnBookAuthorDTOWhenIdExists() {
 
-		AuthorService serviceSpy = Mockito.spy(service);
-		AuthorDTO result = serviceSpy.update(dto, existingId);
+		BookService serviceSpy = Mockito.spy(service);
+		BookAuthorDTO result = serviceSpy.update(bookAuthorDTO,existingId);
 
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getId(), existingId);
@@ -131,11 +174,11 @@ public class AuthorServiceTests {
 	@Test
 	public void updateShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
 
-		AuthorService serviceSpy = Mockito.spy(service);
+		BookService serviceSpy = Mockito.spy(service);
 
 		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
 			@SuppressWarnings("unused")
-			AuthorDTO result = serviceSpy.update(dto, nonExistingId);
+			BookAuthorDTO result = serviceSpy.update(bookAuthorDTO,nonExistingId);
 		});
 	}
 	
@@ -162,4 +205,5 @@ public class AuthorServiceTests {
 		});
 		Mockito.verify(repository, times(1)).deleteById(dependentId);
 	}
+	
 }
