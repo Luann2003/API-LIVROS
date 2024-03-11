@@ -17,16 +17,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.apilivros.apilivros.dto.AuthorDTO;
-import com.apilivros.apilivros.factory.AuthorFactory;
+import com.apilivros.apilivros.dto.BookAuthorDTO;
+import com.apilivros.apilivros.factory.BookFactory;
 import com.apilivros.apilivros.utils.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class AuthorControllerTests {
-
+public class BookControllerTests {
+	
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -55,53 +55,54 @@ public class AuthorControllerTests {
 	}
 
 	@Test
-	public void findAllShouldReturnAuthors() throws Exception {
+	public void findAllShouldReturnBooks() throws Exception {
 
-		ResultActions result = mockMvc.perform(get("/author").contentType(MediaType.APPLICATION_JSON));
+		ResultActions result = mockMvc.perform(get("/books").contentType(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isOk());
 	}
-
+	
 	@Test
-	public void findByIdShouldReturnAuthorWhenIdExist() throws Exception {
-		ResultActions result = mockMvc.perform(get("/author/{id}", existingId).contentType(MediaType.APPLICATION_JSON));
+	public void findByIdShouldReturnBookWhenIdExist() throws Exception {
+		ResultActions result = mockMvc
+				.perform(get("/books/{id}", existingId).contentType(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isOk());
 	}
-
+	
 	@Test
 	public void findByIdShouldReturnBadRequestWhenIdNotExist() throws Exception {
 		ResultActions result = mockMvc
-				.perform(get("/author/{id}", nonExistingId).contentType(MediaType.APPLICATION_JSON));
+				.perform(get("/books/{id}", nonExistingId).contentType(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isNotFound());
 	}
-
+	
 	@Test
 	public void insertShouldReturnCreated() throws Exception {
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 
-		AuthorDTO authorDTO = AuthorFactory.createdAuthorDTO();
+		BookAuthorDTO bookDTO = BookFactory.createdBookAuthorDTO();
 
-		String jsonBody = objectMapper.writeValueAsString(authorDTO);
+		String jsonBody = objectMapper.writeValueAsString(bookDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/author").content(jsonBody).header("Authorization", "Bearer " + accessToken)
+				.perform(post("/books").content(jsonBody).header("Authorization", "Bearer " + accessToken)
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isCreated());
 	}
-
+	
 	@Test
-	public void insertShouldReturnForbbidenIFMemberLogged() throws Exception {
+	public void insertShouldReturnForbbidenIfUserLogged() throws Exception {
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, memberUsername, memberPassword);
 
-		AuthorDTO authorDTO = AuthorFactory.createdAuthorDTO();
+		BookAuthorDTO bookDTO = BookFactory.createdBookAuthorDTO();
 
-		String jsonBody = objectMapper.writeValueAsString(authorDTO);
+		String jsonBody = objectMapper.writeValueAsString(bookDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/author").content(jsonBody).header("Authorization", "Bearer " + accessToken)
+				.perform(post("/books").content(jsonBody).header("Authorization", "Bearer " + accessToken)
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isForbidden());
@@ -111,56 +112,57 @@ public class AuthorControllerTests {
 	public void insertShouldReturnUnauthorized() throws Exception {
 		String accessToken = null;
 
-		AuthorDTO authorDTO = AuthorFactory.createdAuthorDTO();
+		BookAuthorDTO bookDTO = BookFactory.createdBookAuthorDTO();
 
-		String jsonBody = objectMapper.writeValueAsString(authorDTO);
+
+		String jsonBody = objectMapper.writeValueAsString(bookDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/author").content(jsonBody).header("Authorization", "Bearer " + accessToken)
+				.perform(post("/books").content(jsonBody).header("Authorization", "Bearer " + accessToken)
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isUnauthorized());
 	}
-
+	
 	@Test
-	public void updateAuthorShouldReturnIsOk() throws Exception {
+	public void updateBookShouldReturnIsOk() throws Exception {
 
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 
-		AuthorDTO authorDTO = AuthorFactory.createdAuthorDTO();
+		BookAuthorDTO bookDTO = BookFactory.createdBookAuthorDTO();
 
-		String jsonBody = objectMapper.writeValueAsString(authorDTO);
+		String jsonBody = objectMapper.writeValueAsString(bookDTO);
 
 		ResultActions result = mockMvc.perform(
-				put("/author/{id}", existingId).content(jsonBody).header("Authorization", "Bearer " + accessToken)
+				put("/books/{id}", existingId).content(jsonBody).header("Authorization", "Bearer " + accessToken)
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isOk());
 	}
 
 	@Test
-	public void updateAuthorShouldReturnForbbiden() throws Exception {
+	public void updateBookShouldReturnForbbiden() throws Exception {
 
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, memberUsername, memberPassword);
 
-		AuthorDTO authorDTO = AuthorFactory.createdAuthorDTO();
+		BookAuthorDTO bookDTO = BookFactory.createdBookAuthorDTO();
 
-		String jsonBody = objectMapper.writeValueAsString(authorDTO);
+		String jsonBody = objectMapper.writeValueAsString(bookDTO);
 
 		ResultActions result = mockMvc.perform(
-				put("/author/{id}", existingId).content(jsonBody).header("Authorization", "Bearer " + accessToken)
+				put("/books/{id}", existingId).content(jsonBody).header("Authorization", "Bearer " + accessToken)
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isForbidden());
 	}
-
+	
 	@Test
 	public void deleteShouldReturnNotFoundWhenNonExistingId() throws Exception {
 
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 
 		ResultActions result = mockMvc
-				.perform(delete("/author/{id}", nonExistingId).header("Authorization", "Bearer " + accessToken));
+				.perform(delete("/books/{id}", nonExistingId).header("Authorization", "Bearer " + accessToken));
 
 		result.andExpect(status().isNotFound());
 	}
@@ -172,7 +174,7 @@ public class AuthorControllerTests {
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, memberUsername, memberPassword);
 
 		ResultActions result = mockMvc
-				.perform(delete("/author/{id}", existingId).header("Authorization", "Bearer " + accessToken));
+				.perform(delete("/books/{id}", existingId).header("Authorization", "Bearer " + accessToken));
 
 		result.andExpect(status().isForbidden());
 	}
@@ -183,12 +185,11 @@ public class AuthorControllerTests {
 
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 
-		Long idDelete = 11L;
+		Long idDelete = 5L;
 
 		ResultActions result = mockMvc
-				.perform(delete("/author/{id}", idDelete).header("Authorization", "Bearer " + accessToken));
+				.perform(delete("/books/{id}", idDelete).header("Authorization", "Bearer " + accessToken));
 
 		result.andExpect(status().isNoContent());
 	}
-
 }

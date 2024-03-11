@@ -25,6 +25,8 @@ INSERT INTO tb_author(name) VALUES ('Miguel de Cervantes');
 INSERT INTO tb_author(name) VALUES ('Gabriel García Márquez');
 INSERT INTO tb_author(name) VALUES ('Franz Kafka');
 INSERT INTO tb_author(name) VALUES ('Jorge Luis Borges');
+INSERT INTO tb_author(name) VALUES ('Teste Delete');
+
 
 INSERT INTO tb_publisher(name) VALUES ('Seix Barral');
 INSERT INTO tb_publisher(name) VALUES ('Editora Rocco');
@@ -36,6 +38,7 @@ INSERT INTO tb_publisher(name) VALUES ('Editorial Sudamericana');
 INSERT INTO tb_publisher(name) VALUES ('');
 INSERT INTO tb_publisher(name) VALUES ('');
 INSERT INTO tb_publisher(name) VALUES ('');
+INSERT INTO tb_publisher(name) VALUES ('Teste Delete');
 
 INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent ) VALUES ('Ensaio sobre a Cegueira', 9783127323207, 1995, 5, 1, 0);
 INSERT INTO tb_book (title, isbn, year_publication, publisher_id, author_id, rent ) VALUES ('A Hora da Estrela', 9783127323207, 1977, 4, 2, 1);
