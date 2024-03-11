@@ -121,30 +121,30 @@ public class RentControllerTests {
 		result.andExpect(status().isNotFound());
 	}
 	
-//	@Test
-//	public void insertShouldReturnCreated() throws Exception {
-//		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
-//
-//		Rent rent = new Rent();
-//		
-//		
-//		User user = new User();
-//		user.setId(existingId);
-//		rent.setUser(user);
-//		
-//		Book book = new Book();
-//		book.setId(existingId);
-//		rent.setBook(book);
-//		
-//		
-//		String jsonBody = objectMapper.writeValueAsString(rent);
-//
-//		ResultActions result = mockMvc
-//				.perform(post("/rent").content(jsonBody).header("Authorization", "Bearer " + accessToken)
-//						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
-//
-//		result.andExpect(status().isCreated());
-//	}
+	@Test
+	public void insertShouldReturnCreated() throws Exception {
+		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
+
+		Rent rent = new Rent();
+		
+		
+		User user = new User();
+		user.setId(4L);
+		rent.setUser(user);
+		
+		Book book = new Book();
+		book.setId(8L);
+		rent.setBook(book);
+		
+		
+		String jsonBody = objectMapper.writeValueAsString(rent);
+
+		ResultActions result = mockMvc
+				.perform(post("/rent").content(jsonBody).header("Authorization", "Bearer " + accessToken)
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
+
+		result.andExpect(status().isCreated());
+	}
 	
 	@Test
 	public void updateBookShouldReturnIsOk() throws Exception {
