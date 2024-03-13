@@ -1,6 +1,5 @@
 package com.apilivros.apilivros.factory;
 
-import java.time.Duration;
 import java.time.Instant;
 
 import com.apilivros.apilivros.dto.RentDTO;
@@ -18,11 +17,4 @@ public class RentFactory {
 				true, Instant.now());
 		return rentDTO;
 	}
-	
-	public static RentDTO createRentDTOcontroller() {
-		RentDTO rentDTO = new RentDTO(1L, 35.00, Instant.now(), Instant.now().plus(Duration.ofHours(1)), UserFactory.createUserDTO(), BookFactory.createdBookDTO(),
-				true, Instant.now().plus(Duration.ofHours(5)));
-		return rentDTO;
-	}
-
 }

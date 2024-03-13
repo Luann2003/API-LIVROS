@@ -257,5 +257,4 @@ public class RentControllerTests {
 
 		result.andExpect(status().isUnauthorized());
 	}
-	
 }
