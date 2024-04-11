@@ -2,18 +2,24 @@ package com.apilivros.apilivros.dto;
 
 import com.apilivros.apilivros.entities.Book;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class BookAuthorDTO {
 	
+	@Schema(description = "Database generated BookAuthor ID")
 	private Long id;
+	@Schema(description = "BookAuthor title")
 	private String title;
+	@Schema(description = "BookAuthor isbn")
 	private Long isbn;
+	@Schema(description = "BookAuthor year published")
 	private Long yearPublication;
-	
+	@Schema(description = "rented BookAuthor")
 	private boolean rent;
 	
+	@Schema(description = "Author")
 	private AuthorNoBooksDTO author;
-	
+	@Schema(description = "Publisher")
 	private PublisherNoBooksDTO publisher;
 	
 	public BookAuthorDTO() {

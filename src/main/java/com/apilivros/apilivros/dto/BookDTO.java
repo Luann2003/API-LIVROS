@@ -2,12 +2,19 @@ package com.apilivros.apilivros.dto;
 
 import com.apilivros.apilivros.entities.Book;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class BookDTO {
 
+	@Schema(description = "Database generated book ID")
 	private Long id;
+	@Schema(description = "Book title")
 	private String title;
+	@Schema(description = "Book isbn")
 	private Long isbn;
+	@Schema(description = "Book year published")
 	private Long yearPublication;
+	@Schema(description = "rented book")
 	private boolean rent;
 
 	public BookDTO() {
@@ -36,7 +43,7 @@ public class BookDTO {
 	public String getTitle() {
 		return title;
 	}
-
+	
 	public Long getIsbn() {
 		return isbn;
 	}
@@ -48,7 +55,5 @@ public class BookDTO {
 	public boolean isRent() {
 		return rent;
 	}
-
-
 }
 
